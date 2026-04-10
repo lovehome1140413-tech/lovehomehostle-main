@@ -1,0 +1,827 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>基本資料表</title>
+
+  <style>
+    :root{
+      --bg:#F6F1E9;
+      --card:#ffffff;
+      --line:#E3D8C8;
+      --title:#EDE6DA;
+      --text:#3C3A36;
+      --muted:#7B746B;
+      --btn:#2f2d2a;
+    }
+
+    html, body{
+      width:100%;
+      max-width:100%;
+      overflow-x:hidden;
+    }
+    
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+      touch-action: pan-y;
+      -webkit-text-size-adjust: 100%;
+      overflow-x:hidden;
+    }
+
+    @supports not (overflow: clip){
+      body{ overflow-x:hidden; }
+    }
+
+    *{ box-sizing:border-box; }
+    img, canvas{ max-width:100%; display:block; }
+
+    .wrap{
+      width:100%;
+      max-width:900px;
+      margin:0 auto;
+      padding:18px;
+      overflow-x:hidden;
+      contain:layout paint;
+    }
+
+    .brand{ text-align:center; font-weight:800; letter-spacing:1px; margin:6px 0 10px; }
+    .barTitle{
+      background:var(--btn); color:#fff; text-align:center;
+      padding:12px 14px; border-radius:14px; font-weight:800; letter-spacing:3px;
+      margin-bottom:10px;
+    }
+    .hint{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5;
+      margin:10px 0 14px;
+      text-align:center;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:18px;
+      overflow:hidden;
+      margin:12px 0;
+      padding:14px;
+    }
+
+    .secTitle{font-weight:700; margin-bottom:10px;}
+
+    .grid{display:grid; grid-template-columns:1fr 1fr; gap:10px; min-width:0;}
+    .grid3{display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; min-width:0;}
+    @media (max-width:920px){ .grid3{grid-template-columns:repeat(2, 1fr);} }
+    @media (max-width:520px){ .grid3{grid-template-columns:1fr;} }
+    @media (max-width:760px){ .grid{grid-template-columns:1fr;} }
+
+    label{display:block; font-size:13px; margin:2px 0 6px; color:var(--muted);}
+
+    input, textarea, select{
+      width:100%;
+      min-width:0;
+      padding:10px 10px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:#fff;
+      font-size:16px;
+      color:var(--text);
+    }
+    textarea{min-height:86px; resize:vertical;}
+
+    .row{display:flex; gap:12px; flex-wrap:wrap;}
+    .chip{
+      display:flex; gap:8px; align-items:center;
+      padding:8px 10px; border:1px solid var(--line);
+      border-radius:999px; background:#fff; font-size:14px;
+    }
+    .chip input{width:auto;}
+    .small{font-size:12px; color:var(--muted); line-height:1.5;}
+
+    .sigBox{background:#fff; border:1px dashed #cdbfae; border-radius:12px; padding:10px;}
+    canvas{width:100%; height:180px; border:1px solid var(--line); border-radius:12px; touch-action:none;}
+
+    .btns{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; min-width:0;}
+    button{
+      padding:11px 14px; border:0; border-radius:14px;
+      cursor:pointer; font-size:15px;
+      background:var(--btn); color:#fff;
+      white-space:nowrap;
+    }
+    .primary{background:var(--btn); color:#fff;}
+    .ghost{background:#fff; border:1px solid var(--line); color:var(--text);}
+
+    .footer{margin:14px 0 24px; font-size:12px; color:var(--muted); line-height:1.5;}
+    .status{margin-top:10px; font-size:14px;}
+    .ok{color:#1b7f3a;}
+    .bad{color:#b00020;}
+
+    .infoBox{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px 14px;
+      margin-bottom:10px;
+    }
+
+    .infoTitle{
+      font-weight:800;
+      margin-bottom:6px;
+      color:var(--text);
+    }
+
+    .infoLine{
+      font-size:14px;
+      color:var(--muted);
+      line-height:1.5;
+    }
+
+    .infoTitle::before{
+      content:"";
+      display:inline-block;
+      width:4px;
+      height:14px;
+      background:var(--line);
+      border-radius:999px;
+      margin-right:8px;
+      vertical-align:middle;
+    }
+
+    .agreementScroll{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:16px;
+      max-height:320px;
+      overflow-y:auto;
+      line-height:1.95;
+      font-size:15px;
+      color:var(--text);
+    }
+
+    .agreementDocTitle{
+      text-align:center;
+      font-weight:800;
+      font-size:28px;
+      letter-spacing:2px;
+      margin:6px 0 20px;
+      color:var(--text);
+    }
+
+    .agreementItem{
+      margin-bottom:14px;
+      text-align:justify;
+    }
+
+    .agreementConfirm{
+      margin-top:14px;
+      padding:12px 14px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#fff;
+    }
+
+    .agreementCheck{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      color:var(--text);
+      font-size:15px;
+      line-height:1.6;
+      margin:0;
+    }
+
+    .agreementCheck input{
+      width:18px;
+      height:18px;
+      min-width:18px;
+      margin-top:2px;
+      accent-color:#2f2d2a;
+    }
+
+    .agreementSignBlock{
+      text-align:center;
+      margin-top:28px;
+      line-height:2.8;
+      letter-spacing:2px;
+    }
+  </style>
+
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+  <script>
+    /***********************
+     只需要修改下面這一區
+    ***********************/
+    const STORE_CONFIG = {
+      storeName: "寵愛有家寵物旅館",
+      gasUrl: "https://script.google.com/macros/s/AKfycbw2zXOmokmtWK46b6sul93TPD1Pki7NKAoMlbv3hkB4-ORb9lxfMbcLS09d849SaQXT0w/exec",
+      sharedSecret: "Lucky-10293847",
+      liffId: "2009691281-61TDGvJl",
+
+      vetName: "麗明動物醫院", 
+      vetPhone: "02868733778",
+      vetAddress: "新北市板橋區金門街306號1樓-1",
+
+      pageTitle: "基本資料表",
+      pageHint: "請於住宿前填寫完成本資料表！",
+     
+      emergencyConsentText: "住宿期間若寵物有就醫需求，本人同意由OO寵物帶往OO動物醫院就診。",
+
+      emailNoticeText: "送出後將自動寄送副本至店家與您填寫的Email。"
+    };
+  </script>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="brand" id="brandText">寵愛有家</div>
+    <div class="barTitle" id="pageTitleText">— 基本資料表 —</div>
+    <div class="hint" id="pageHintText">請於住宿前填寫完成本資料表！</div>
+
+    <div class="card">
+      <div class="secTitle">飼主資料</div>
+      <div class="grid">
+        <div>
+          <label>主要聯絡人</label>
+          <input id="owner_name" placeholder="例：陳小美" required />
+        </div>
+        <div>
+          <label>身分證字號</label>
+          <input id="owner_id_no" placeholder="例：A123456789" required />
+        </div>
+        <div>
+          <label>手機號碼</label>
+          <input id="owner_phone" inputmode="tel" placeholder="09xxxxxxxx" required />
+        </div>
+        <div>
+          <label>Email(寄送副本)</label>
+          <input id="owner_email" inputmode="email" placeholder="you@example.com" />
+        </div>
+        <div>
+          <label>現居地址</label>
+          <input id="owner_address" placeholder="縣市／區／路／號" required />
+        </div>
+      </div>
+
+      <div style="height:10px"></div>
+      <div class="secTitle">備用聯絡人</div>
+      <div class="grid">
+        <div>
+          <label>備用聯絡人</label>
+          <input id="backup_name" placeholder="例：王小名" />
+        </div>
+        <div>
+          <label>聯絡人手機</label>
+          <input id="backup_phone" inputmode="tel" placeholder="09xxxxxxxx" />
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="secTitle">寵物資料</div>
+
+      <div class="grid3">
+        <div>
+          <label>名字</label>
+          <input id="pet_name" placeholder="例：Lucky" required />
+        </div>
+
+        <div>
+          <label>性別</label>
+          <select id="pet_sex" required>
+            <option value="">請選擇</option>
+            <option>男</option>
+            <option>女</option>
+          </select>
+        </div>
+
+        <div>
+          <label>寵物年齡 (新加入)</label>
+          <input id="pet_age" placeholder="例：3歲" required />
+        </div>
+
+        <div>
+          <label>品種/毛色</label>
+          <input id="pet_breed" placeholder="例：比熊／白色" required />
+        </div>
+
+        <div>
+          <label>基礎疫苗施打時間</label>
+          <input
+            id="pet_birth_date"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            maxlength="10"
+            placeholder="例：2021/02/14"
+          />
+          <div class="small">格式：YYYY/MM/DD（可直接輸入8碼數字）</div>
+        </div>
+
+        <div>
+          <label>是否已絕育</label>
+          <select id="pet_neutered">
+            <option value="">請選擇</option>
+            <option>已絕育</option>
+            <option>未絕育</option>
+          </select>
+        </div>
+
+        <div>
+          <label>是否抬腿</label>
+          <select id="pet_leg_lift">
+            <option value="">請選擇</option>
+            <option>是</option>
+            <option>否</option>
+          </select>
+        </div>
+
+        <div>
+          <label>體外驅蟲時間</label>
+          <input
+            id="pet_deworm_date"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            maxlength="10"
+            placeholder="例：2023/06/11"
+          />
+          <div class="small">格式：YYYY/MM/DD（可直接輸入8碼數字）</div>
+        </div>
+
+        <div>
+          <label>體外驅蟲方式</label>
+          <select id="pet_deworm_way">
+            <option value="">請選擇</option>
+            <option>滴劑</option>
+            <option>口服</option>
+            <option>無</option>
+          </select>
+          <div class="small" style="margin-top:6px; line-height:1.4; color:#C0392B;">
+            *飼養寵物皆須施打晶片、絕育並按時施打狂犬病疫苗*
+          </div>
+        </div>
+      </div>
+
+      <div style="height:10px"></div>
+      <div class="grid">
+        <div>
+          <label>晶片號碼</label>
+          <input id="pet_chip" inputmode="numeric" pattern="[0-9]*" placeholder="例：900xxxxxxx" />
+        </div>
+        <div>
+          <label>狂犬疫苗注射時間</label>
+          <input id="pet_rabies" inputmode="numeric" placeholder="例：2023/06/11" />
+        </div>
+      </div>
+
+      <div style="height:10px"></div>
+      <label>寵物生理狀況（目視）</label>
+      <div class="row" id="phys_row">
+        <label class="chip"><input type="radio" name="phys_status" value="正常" checked>正常</label>
+        <label class="chip"><input type="radio" name="phys_status" value="異常">異常</label>
+      </div>
+      <div class="grid" style="margin-top:8px;">
+        <div>
+          <label>異常狀況說明</label>
+          <input id="phys_abnormal_note" placeholder="若選異常，請簡述（選填）" />
+          <div class="small">若上方選「異常」，請在此補充說明。</div>
+        </div>
+      </div>
+
+      <div style="height:10px"></div>
+      <label>特殊疾病 / 舊疾（可複選）</label>
+      <div class="row" id="disease_row">
+        <label class="chip"><input type="checkbox" value="心臟病">心臟病</label>
+        <label class="chip"><input type="checkbox" value="氣喘">氣喘</label>
+        <label class="chip"><input type="checkbox" value="氣管塌陷">氣管塌陷</label>
+        <label class="chip"><input type="checkbox" value="關節問題">關節問題</label>
+        <label class="chip"><input type="checkbox" value="糖尿病">糖尿病</label>
+        <label class="chip"><input type="checkbox" value="白內障">白內障</label>
+        <label class="chip"><input type="checkbox" value="癲癇">癲癇</label>
+        <label class="chip"><input type="checkbox" value="骨折">骨折</label>
+        <label class="chip"><input type="checkbox" value="懷孕">懷孕</label>
+        <label class="chip"><input type="checkbox" value="腸炎">腸炎</label>
+        <label class="chip"><input type="checkbox" value="血便">血便</label>
+        <label class="chip"><input type="checkbox" value="血尿">血尿</label>
+        <label class="chip"><input type="checkbox" value="外傷未癒合">外傷未癒合</label>
+        <label class="chip"><input type="checkbox" value="其它">其它</label>
+      </div>
+
+      <div class="grid">
+        <div>
+          <label>手術外傷尚未癒合狀況說明</label>
+          <input id="pet_wound" placeholder="例：左後腳手術傷口" />
+        </div>
+        <div>
+          <label>其它（選填）</label>
+          <input id="pet_other_disease" placeholder="例：皮膚過敏、腸胃敏感..." />
+        </div>
+      </div>
+
+      <div style="height:10px"></div>
+      <div class="grid">
+        <div>
+          <label>配合動物醫院</label>
+
+          <div class="infoBox">
+            <div class="infoTitle" id="vetNameText">OO動物醫院</div>
+            <div class="infoLine">地址：<span id="vetAddressText">OO市OO區OO路OO號</span></div>
+            <div class="infoLine">電話：<span id="vetPhoneText">0212345678</span></div>
+          </div>
+        </div>
+
+        <div>
+          <label>緊急情況授權（必填）*</label>
+          <select id="emergency_consent" required>
+            <option value="">請選擇</option>
+            <option value="同意">同意緊急送醫</option>
+            <option value="不同意">不同意（請於備註說明處理方式）</option>
+          </select>
+          <div class="small" style="margin-top:6px; line-height:1.5;" id="emergencyConsentText">
+            住宿期間若寵物有就醫需求，本人同意由OO寵物帶往OO動物醫院就診。
+          </div>
+        </div>
+      </div>
+
+      <div style="height:10px"></div>
+      <label>住宿備註（飲食、藥物、分離焦慮、注意事項等）</label>
+      <textarea id="note" placeholder="例：早晚各半杯飼料；會吃藥；怕生；不與陌生狗互動..."></textarea>
+    </div>
+
+    <div class="card">
+      <div class="secTitle">住宿切結書</div>
+
+      <div class="agreementScroll">
+        <div class="agreementDocTitle">寵愛有家寵物旅館切結書</div>
+
+        <div class="agreementItem">
+          1. 住宿(美容)期間若您的愛寵有身體不適情形發生時，我們會先告知飼主並送至本旅館鄰近醫院進行觀察治療。(治療後會要求醫院開立收據，費用則由飼主負擔)。但因旅館人為疏失導致寵物受傷、遺失、死亡等，本店應負醫療費用之責；以公證第三方判定為原則。(寵物生病原因，雙方同意由獸醫院鑑定)
+        </div>
+
+        <div class="agreementItem">
+          2. 未經飼主同意，本店不得將寵物帶離寄宿場所、轉售、轉讓或以其他變相方法作為其他用途，如有違反此項之情事，經查屬實應全額退費及負法律相關責任，絕無異議。
+        </div>
+
+        <div class="agreementItem">
+          3. 飼主於寄宿日期中止或期滿，除經本店同意繼續留宿外，應即日將寵物領回，如超過48小時以上未聯繫到飼主，將視為飼主惡意棄養，本店得依動物保護法處置或送養他人，沒收寄宿費，並得將寄養時所附之食/用品，作為送養時贈送收養人之用，飼主不得主張任何權利。
+        </div>
+
+        <div class="agreementItem">
+          4. 飼主於(犬、貓寄養簽約前詢問事項及基本資料表)表中關於寵物之健康情形、飼養須知等善盡告知義務，如有欺瞞不實者所導致寵物疾病、傷害、遺失、死亡等，本店概不負責；若導致其他寵物傳染而生病或死亡，或致本店財產毀滅損失，影響商譽者，飼主須負責賠償之責，絕無異議。動物保護法中規定：處以兩千元以上，一萬元以下之罰鍰，拒絕改善者將按次受罰，如惡意棄養者將處一萬至一萬五不等罰鍰。
+        </div>
+
+        <div class="agreementItem">
+          5. 如寵物為八歲以上老犬住宿，請確認其健康狀況，本旅館將善盡日常照顧之責，若為自然因素、身體因素而有任何問題，本店概不負責。
+        </div>
+
+        <div class="agreementItem">
+          6. 若住宿/洗澡/美容之寵物，具攻擊性、傳染病、傳染性寄身蟲或嚴重吠叫之情況，本店有拒絕之權益，請飼主領回或送動物醫院住宿，住宿費用得由飼主負擔；若因此造成其他寵物或工作人員的傷害，飼主應負賠償之責。
+        </div>
+
+        <div class="agreementItem">
+          7. 未結紮母犬，請先確認住宿期間是否為發情期，若剛好於住宿期間發情，本店會善盡照顧之責。
+        </div>
+      </div>
+
+      <div class="agreementConfirm">
+        <label class="agreementCheck">
+          <input type="checkbox" id="agreement_confirm" />
+          <span>我已閱讀並確認以上切結書內容</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="secTitle">飼主簽名</div>
+      <div class="sigBox">
+        <div class="small">請在下方簽名</div>
+        <canvas id="sig"></canvas>
+        <div class="btns">
+          <button class="ghost" id="clearBtn" type="button">清除簽名</button>
+        </div>
+      </div>
+
+      <div style="height:10px"></div>
+      <div class="grid">
+        <div>
+          <label>簽名日期 *</label>
+          <input id="signed_date" />
+        </div>
+        <div>
+          <label id="emailNoticeLabel">送出後將自動寄送副本至店家與您填寫的Email。</label>
+        </div>
+      </div>
+
+      <div class="btns">
+        <button class="primary" id="submitBtn" type="button">送出表單</button>
+      </div>
+      <div class="status" id="status"></div>
+    </div>
+
+    <div class="footer">
+      送出即表示您所填資料為真，並同意住宿期間店家依照安全與衛生原則進行照護。如遇緊急狀況，依您勾選之授權處理。
+    </div>
+  </div>
+
+<script>
+  const CFG = STORE_CONFIG;
+  let LIFF_PROFILE = {
+    userId: "",
+    displayName: "",
+    pictureUrl: "",
+    statusMessage: ""
+  };
+
+  document.title = `${CFG.storeName}｜${CFG.pageTitle}`;
+  document.getElementById("brandText").textContent = CFG.storeName;
+  document.getElementById("pageTitleText").textContent = `— ${CFG.pageTitle} —`;
+  document.getElementById("pageHintText").textContent = CFG.pageHint;
+  document.getElementById("vetNameText").textContent = CFG.vetName;
+  document.getElementById("vetAddressText").textContent = CFG.vetAddress;
+  document.getElementById("vetPhoneText").textContent = CFG.vetPhone;
+  document.getElementById("emergencyConsentText").textContent = CFG.emergencyConsentText;
+  document.getElementById("emailNoticeLabel").textContent = CFG.emailNoticeText;
+
+  const GAS_URL = CFG.gasUrl;
+
+  const d = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  document.getElementById("signed_date").value = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+
+  const canvas = document.getElementById('sig');
+  const ctx = canvas.getContext('2d');
+
+  function resizeCanvas(){
+    const rect = canvas.getBoundingClientRect();
+    const ratio = Math.max(window.devicePixelRatio || 1, 1);
+    canvas.width = Math.floor(rect.width * ratio);
+    canvas.height = Math.floor(rect.height * ratio);
+    ctx.setTransform(ratio,0,0,ratio,0,0);
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = '#111';
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  let drawing = false;
+  let last = null;
+
+  function getPos(e){
+    const rect = canvas.getBoundingClientRect();
+    const touch = e.touches ? e.touches[0] : null;
+    const clientX = touch ? touch.clientX : e.clientX;
+    const clientY = touch ? touch.clientY : e.clientY;
+    return { x: clientX - rect.left, y: clientY - rect.top };
+  }
+
+  function start(e){
+    e.preventDefault();
+    drawing = true;
+    last = getPos(e);
+  }
+
+  function move(e){
+    if(!drawing) return;
+    e.preventDefault();
+    const p = getPos(e);
+    ctx.beginPath();
+    ctx.moveTo(last.x, last.y);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+    last = p;
+  }
+
+  function end(e){
+    if(!drawing) return;
+    e.preventDefault();
+    drawing = false;
+    last = null;
+  }
+
+  canvas.addEventListener('mousedown', start);
+  canvas.addEventListener('mousemove', move);
+  window.addEventListener('mouseup', end);
+
+  canvas.addEventListener('touchstart', start, {passive:false});
+  canvas.addEventListener('touchmove', move, {passive:false});
+  canvas.addEventListener('touchend', end, {passive:false});
+
+  document.getElementById('clearBtn').addEventListener('click', ()=>{
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+  });
+
+  function canvasIsBlank(){
+    const blank = document.createElement('canvas');
+    blank.width = canvas.width;
+    blank.height = canvas.height;
+    return canvas.toDataURL() === blank.toDataURL();
+  }
+
+  function checkedDiseases(){
+    return [...document.querySelectorAll('#disease_row input[type="checkbox"]:checked')].map(x=>x.value);
+  }
+
+  function val(id){
+    return (document.getElementById(id)?.value || "").trim();
+  }
+
+  function setStatus(msg, ok=false){
+    const el = document.getElementById('status');
+    el.textContent = msg;
+    el.className = "status " + (ok ? "ok":"bad");
+  }
+
+  function formatDateSlash(v){
+    const digits = (v || "").replace(/\D/g, "").slice(0, 8);
+    const y = digits.slice(0, 4);
+    const m = digits.slice(4, 6);
+    const dd = digits.slice(6, 8);
+
+    if(digits.length <= 4) return y;
+    if(digits.length <= 6) return `${y}/${m}`;
+    return `${y}/${m}/${dd}`;
+  }
+
+  const dewormDateInput = document.getElementById("pet_deworm_date");
+  if (dewormDateInput) {
+    dewormDateInput.addEventListener("input", (e) => {
+      e.target.value = formatDateSlash(e.target.value);
+    });
+  }
+
+  const birthInput = document.getElementById("pet_birth_date");
+  if (birthInput) {
+    birthInput.addEventListener("input", (e) => {
+      e.target.value = formatDateSlash(e.target.value);
+    });
+  }
+
+  const rabiesInput = document.getElementById("pet_rabies");
+  if (rabiesInput) {
+    rabiesInput.addEventListener("input", (e) => {
+      e.target.value = formatDateSlash(e.target.value);
+    });
+  }
+
+  async function initLiffProfile(){
+    try{
+      if(!CFG.liffId || CFG.liffId === "請填入你的LIFF_ID"){
+        console.warn("尚未設定 LIFF ID");
+        return;
+      }
+
+      if(typeof liff === "undefined"){
+        console.warn("LIFF SDK 載入失敗");
+        return;
+      }
+
+      await liff.init({ liffId: CFG.liffId });
+
+      if(!liff.isLoggedIn()){
+        liff.login({ redirectUri: location.href });
+        return;
+      }
+
+      const profile = await liff.getProfile();
+      LIFF_PROFILE = {
+        userId: profile.userId || "",
+        displayName: profile.displayName || "",
+        pictureUrl: profile.pictureUrl || "",
+        statusMessage: profile.statusMessage || ""
+      };
+
+    }catch(err){
+      console.error("LIFF 初始化失敗：", err);
+    }
+  }
+
+  window.addEventListener("load", initLiffProfile);
+
+  document.getElementById('submitBtn').addEventListener('click', async ()=>{
+    try{
+      const required = [
+        ["owner_name","請填主要聯絡人姓名"],
+        ["owner_id_no","請填身分證字號"],
+        ["owner_phone","請填手機"],
+        ["owner_email","請填 Email"],
+        ["owner_address","請填現居地址"],
+        ["backup_name","請填備用聯絡人"],
+        ["backup_phone","請填備用聯絡人手機"],
+        ["pet_name","請填寵物名字"],
+        ["pet_sex","請選擇性別"],
+        ["pet_age", "請填寵物年齡"],
+        ["pet_breed","請填品種/毛色"],
+        ["pet_birth_date","請填基礎疫苗施打時間"],
+        ["pet_neutered","請選擇是否已絕育"],
+        ["pet_leg_lift","請選擇是否抬腿"],
+        ["pet_deworm_date","請填體外驅蟲時間"],
+        ["pet_deworm_way","請選擇體外驅蟲方式"],
+        ["pet_chip","請填晶片號碼"],
+        ["pet_rabies","請填狂犬疫苗注射時間"],
+        ["emergency_consent","請選擇緊急情況授權"],
+        ["signed_date","請填簽名日期"],
+      ];
+
+      for(const [id,msg] of required){
+        if(!val(id)){ setStatus(msg); return; }
+      }
+
+      if(!document.getElementById("agreement_confirm").checked){
+        setStatus("請先勾選已閱讀並確認切結書內容");
+        return;
+      }
+
+      if(canvasIsBlank()){
+        setStatus("請先簽名");
+        return;
+      }
+
+      if(!GAS_URL || GAS_URL.includes("請貼上 GAS Web App 網址")){
+        setStatus("請先設定 GAS_URL");
+        return;
+      }
+
+      setStatus("送出中…請稍候");
+
+      const payload = {
+        action: "submitHotelIntake",
+        secret: CFG.sharedSecret,
+        data: {
+          owner_name: val("owner_name"),
+          owner_id_no: val("owner_id_no"),
+          owner_phone: val("owner_phone"),
+          owner_email: val("owner_email"),
+          owner_address: val("owner_address"),
+          backup_name: val("backup_name"),
+          backup_phone: val("backup_phone"),
+
+          pet_name: val("pet_name"),
+          pet_sex: val("pet_sex"),
+          pet_age: val("pet_age"),
+          pet_breed: val("pet_breed"),
+          pet_birth_date: val("pet_birth_date"),
+          pet_neutered: val("pet_neutered"),
+          pet_leg_lift: val("pet_leg_lift"),
+
+          pet_deworm_date: val("pet_deworm_date"),
+          pet_deworm_way: val("pet_deworm_way"),
+
+          pet_chip: val("pet_chip"),
+          pet_rabies: val("pet_rabies"),
+
+          phys_status: (document.querySelector('input[name="phys_status"]:checked')?.value || ""),
+          phys_abnormal_note: val("phys_abnormal_note"),
+
+          pet_diseases: checkedDiseases(),
+          pet_wound: val("pet_wound"),
+          pet_other_disease: val("pet_other_disease"),
+
+          vet_name: CFG.vetName,
+          vet_phone: CFG.vetPhone,
+          vet_address: CFG.vetAddress,
+
+          emergency_consent: val("emergency_consent"),
+          note: val("note"),
+
+          agreement_confirm: document.getElementById("agreement_confirm").checked ? "已閱讀並確認" : "",
+
+          signed_date: val("signed_date"),
+          signature_png: canvas.toDataURL("image/png"),
+
+          line_user_id: LIFF_PROFILE.userId || "",
+          line_display_name: LIFF_PROFILE.displayName || "",
+          line_picture_url: LIFF_PROFILE.pictureUrl || "",
+          line_status_message: LIFF_PROFILE.statusMessage || "",
+
+          ua: navigator.userAgent,
+          created_at: new Date().toISOString()
+        }
+      };
+
+      const res = await fetch(GAS_URL, {
+        method: "POST",
+        headers: {"Content-Type":"text/plain;charset=utf-8"},
+        body: JSON.stringify(payload)
+      });
+
+      const json = await res.json();
+      if(!json.ok){
+        setStatus("送出失敗：" + (json.error || "未知錯誤"));
+        return;
+      }
+
+      setStatus("✅ 已送出！將會寄送表單至您的Email", true);
+      document.getElementById('submitBtn').disabled = true;
+
+    }catch(err){
+      setStatus("送出失敗：" + err.message);
+    }
+  });
+</script>
+</body>
+</html>
